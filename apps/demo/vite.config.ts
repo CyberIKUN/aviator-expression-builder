@@ -2,8 +2,11 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 
+const demoBasePath = process.env.DEMO_BASE_PATH?.replace(/^\/+|\/+$/g, '')
+
 export default defineConfig({
   plugins: [vue()],
+  base: demoBasePath ? `/${demoBasePath}/` : '/',
   server: {
     port: 8989,
   },
