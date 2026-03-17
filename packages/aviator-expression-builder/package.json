@@ -1,7 +1,7 @@
 {
   "name": "aviator-expression-builder",
   "description": "Aviator expression visual builder for Vue 3 with parser/generator/validator support.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "Apache-2.0",
   "type": "module",
   "types": "./index.d.ts",
