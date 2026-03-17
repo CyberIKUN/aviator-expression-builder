@@ -4578,8 +4578,13 @@ function ts(t) {
     valueInputListeners: {
       "update:value": (n) => e("update:value", n),
       "update:value-data-type": (n, o) => {
-        const r = (a.selectedFunction == null ? void 0 : a.selectedFunction.name) || "condition_value";
-        o === void 0 ? e("update:value-data-type", { fieldName: r, dataType: n }) : e("update:value-data-type", { fieldName: n, dataType: o });
+        const r = ((a == null ? void 0 : a.node) && a.node.functionName) || (((a == null ? void 0 : a.selectedFunction) == null ? void 0 : a.selectedFunction.name) || "condition_value");
+        if (o === void 0) {
+          e("update:value-data-type", { fieldName: r, dataType: n });
+          return;
+        }
+        const i = typeof n == "string" && n ? n : r;
+        e("update:value-data-type", { fieldName: i, dataType: o });
       }
     }
   };
@@ -4604,13 +4609,14 @@ const os = /* @__PURE__ */ V({
   emits: ["update:value", "update:value-data-type"],
   setup(t, { emit: e }) {
     const a = e, { valueInputListeners: n } = ns({
-      emit: a
+      emit: a,
+      props: t
     });
     return (o, r) => (c(), y(Te, h({
       key: `${o.node.id}-value`,
       value: o.node.value,
-      "field-type": o.selectedFunction.returnType,
-      "field-name": o.selectedFunction.name,
+      "field-type": (o.selectedFunction == null ? void 0 : o.selectedFunction.returnType) || "string",
+      "field-name": o.node.functionName || ((o.selectedFunction == null ? void 0 : o.selectedFunction.name) || "condition_value"),
       comparison: o.node.comparison,
       "available-fields": o.availableFields,
       "current-data-type": o.currentDataType
@@ -4638,7 +4644,11 @@ function is(t) {
   };
 }
 function ls(t) {
-  const { props: e, emit: a } = t, n = _(() => e.getParameterDataType && e.getParameterDataType(e.node.id, e.selectedFunction.name) || "string"), o = is({ emit: a });
+  const { props: e, emit: a } = t, n = _(() => {
+    var r;
+    const o = e.node.functionName || ((r = e.selectedFunction) == null ? void 0 : r.name) || "condition_value";
+    return e.getParameterDataType && e.getParameterDataType(e.node.id, o) || "string";
+  }), o = is({ emit: a });
   return {
     currentDataType: n,
     listeners: o
