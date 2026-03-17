@@ -1,0 +1,8 @@
+node_modules
+.pnpm-store
+.npm-cache
+.DS_Store
+.idea/
+apps/demo/node_modules
+packages/aviator-expression-builder/node_modules
+apps/demo/dist

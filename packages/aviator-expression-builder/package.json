@@ -1,0 +1,69 @@
+{
+  "name": "aviator-expression-builder",
+  "description": "Aviator expression visual builder for Vue 3 with parser/generator/validator support.",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "types": "./index.d.ts",
+  "main": "./index.cjs",
+  "module": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CyberIKUN/aviator-expression-builder.git",
+    "directory": "packages/aviator-expression-builder"
+  },
+  "homepage": "https://github.com/CyberIKUN/aviator-expression-builder/tree/main/packages/aviator-expression-builder",
+  "bugs": {
+    "url": "https://github.com/CyberIKUN/aviator-expression-builder/issues"
+  },
+  "keywords": [
+    "aviator",
+    "expression",
+    "builder",
+    "vue3",
+    "rule-engine"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "*.js",
+    "*.cjs",
+    "*.d.ts",
+    "*.css",
+    "README.md",
+    "PUBLIC_API.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./vue": {
+      "types": "./vue.d.ts",
+      "import": "./vue.js",
+      "require": "./vue.cjs"
+    },
+    "./headless": {
+      "types": "./headless.d.ts",
+      "import": "./headless.js",
+      "require": "./headless.cjs"
+    },
+    "./legacy": {
+      "types": "./legacy.d.ts",
+      "import": "./legacy.js",
+      "require": "./legacy.cjs"
+    },
+    "./style.css": "./style.css",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "@arco-design/web-vue": "^2.57.0",
+    "vue": "^3.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

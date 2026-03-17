@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a defect in the package or demo.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened and what did you expect?
+      placeholder: Describe the bug clearly.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Steps, code snippets, or repository link.
+      placeholder: 1) ... 2) ... 3) ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: e.g. 0.1.0
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: e.g. Node 20, Vue 3.5.x, Vite 5.x

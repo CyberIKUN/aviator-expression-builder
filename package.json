@@ -1,0 +1,18 @@
+{
+  "name": "aviator-expression-builder-workspace",
+  "private": true,
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "packageManager": "pnpm@9.3.0",
+  "scripts": {
+    "dev": "pnpm --filter aviator-expression-builder-demo dev",
+    "build": "pnpm --filter aviator-expression-builder-demo build",
+    "preview": "pnpm --filter aviator-expression-builder-demo preview",
+    "check": "pnpm check:api && pnpm check:demo && pnpm check:package",
+    "check:release": "pnpm check && node ./scripts/check-release-readiness.mjs --strict-metadata",
+    "check:api": "node ./scripts/check-public-api.mjs",
+    "check:release:meta": "node ./scripts/check-release-readiness.mjs",
+    "check:demo": "pnpm --filter aviator-expression-builder-demo build",
+    "check:package": "npm pack --dry-run --cache ./.npm-cache ./packages/aviator-expression-builder"
+  }
+}

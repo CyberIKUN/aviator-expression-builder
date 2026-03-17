@@ -1,0 +1,143 @@
+.tree-expression-builder .value-input .data-type-radio.arco-radio-group,
+.tree-expression-builder .value-input .data-type-radio.arco-radio-group-button {
+  display: inline-flex !important;
+  gap: 8px !important;
+  background: transparent !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-button,
+.tree-expression-builder .value-input .data-type-radio label.arco-radio-button,
+.tree-expression-builder .value-input .data-type-radio .arco-radio {
+  min-width: 84px !important;
+  height: 28px !important;
+  line-height: 26px !important;
+  margin: 0 !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid #d9dce3 !important;
+  background: #fff !important;
+  color: #4e5969 !important;
+  box-shadow: none !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-button::before,
+.tree-expression-builder .value-input .data-type-radio label.arco-radio-button::before {
+  border-radius: 999px !important;
+  border: 1px solid #d9dce3 !important;
+  background: #fff !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-button-content {
+  color: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  line-height: 1 !important;
+  text-align: center !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:has(input[value='string']),
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:nth-child(1) {
+  color: #ff7d00 !important;
+  border-color: #ff7d00 !important;
+  background-color: #fff7e6 !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:has(input[value='number']),
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:nth-child(2) {
+  color: #165dff !important;
+  border-color: #165dff !important;
+  background-color: #e8f3ff !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:has(input[value='boolean']),
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:nth-child(3) {
+  color: #00b42a !important;
+  border-color: #00b42a !important;
+  background-color: #e8ffea !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:has(input[value='string'])::before,
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:nth-child(1)::before {
+  border-color: #ff7d00 !important;
+  background-color: #fff7e6 !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:has(input[value='number'])::before,
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:nth-child(2)::before {
+  border-color: #165dff !important;
+  background-color: #e8f3ff !important;
+}
+
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:has(input[value='boolean'])::before,
+.tree-expression-builder .value-input .data-type-radio .arco-radio-checked:nth-child(3)::before {
+  border-color: #00b42a !important;
+  background-color: #e8ffea !important;
+}
+
+.tree-expression-builder .node-type-radio.arco-radio-group-button {
+  display: inline-flex !important;
+  gap: 8px !important;
+  background: transparent !important;
+}
+
+.tree-expression-builder .node-type-radio .arco-radio-button,
+.tree-expression-builder .node-type-radio label.arco-radio-button,
+.tree-expression-builder .node-type-radio .arco-radio {
+  min-width: 98px !important;
+  height: 30px !important;
+  line-height: 28px !important;
+  margin: 0 !important;
+  padding: 0 8px !important;
+  border-radius: 6px !important;
+  border: 1px solid #d9dce3 !important;
+  background: #fff !important;
+  color: #4e5969 !important;
+  box-shadow: none !important;
+}
+
+.tree-expression-builder .node-type-radio .arco-radio-button-content {
+  color: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  gap: 4px;
+}
+
+.tree-expression-builder .node-type-radio .arco-radio-checked:has(input[value='condition']),
+.tree-expression-builder .node-type-radio .arco-radio-checked:nth-child(1) {
+  color: #165dff !important;
+  border-color: #165dff !important;
+  background-color: #e8f3ff !important;
+}
+
+.tree-expression-builder .node-type-radio .arco-radio-checked:has(input[value='function']),
+.tree-expression-builder .node-type-radio .arco-radio-checked:nth-child(2) {
+  color: #722ed1 !important;
+  border-color: #722ed1 !important;
+  background-color: #f5edff !important;
+}
+
+.tree-expression-builder .field-select-compact.arco-select,
+.tree-expression-builder .field-select-compact.arco-select-view-single,
+.tree-expression-builder span.field-select-compact {
+  border: 1px solid #d9dce3 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.tree-expression-builder .field-select-compact.arco-select:hover,
+.tree-expression-builder .field-select-compact.arco-select-view-single:hover {
+  border-color: #c9cdd4 !important;
+}
+
+.tree-expression-builder .field-select-compact.arco-select.arco-select-view-focus,
+.tree-expression-builder .field-select-compact.arco-select-view-single.arco-select-view-focus {
+  border-color: #165dff !important;
+  box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.12) !important;
+}

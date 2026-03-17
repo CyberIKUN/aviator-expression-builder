@@ -1,0 +1,67 @@
+/* Shared global select overrides for node editors */
+
+.field-select-compact.arco-select,
+.field-select-compact.arco-select-view-single,
+span.field-select-compact {
+  width: auto !important;
+  min-width: 120px !important;
+  max-width: 400px !important;
+}
+
+.field-select-compact .arco-select-view-value,
+.field-select-compact.arco-select-view-single .arco-select-view-value {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+.operator-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .operator-symbol {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-weight: bold;
+    color: rgb(var(--primary-6));
+  }
+
+  .operator-label {
+    color: var(--color-text-2);
+  }
+}
+
+.comparison-operator-select.arco-select-view-single,
+.comparison-operator-select.arco-select,
+span.arco-select-view-single.comparison-operator-select,
+span.comparison-operator-select,
+.extra-comparison-select.arco-select-view-single,
+.extra-comparison-select.arco-select,
+span.arco-select-view-single.extra-comparison-select,
+span.extra-comparison-select {
+  width: 120px !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  padding-left: 4px !important;
+  outline: none !important;
+  align-self: flex-start !important;
+}
+
+.comparison-operator-select .arco-select-view-value,
+.comparison-operator-select.arco-select-view-single .arco-select-view-value,
+.extra-comparison-select .arco-select-view-value,
+.extra-comparison-select.arco-select-view-single .arco-select-view-value {
+  color: rgb(var(--primary-6)) !important;
+  font-weight: 600 !important;
+  font-family: 'Consolas', 'Monaco', monospace !important;
+  font-size: 14px !important;
+}
+
+.comparison-operator-select.arco-select-view-single:hover,
+.comparison-operator-select:hover,
+.extra-comparison-select.arco-select-view-single:hover,
+.extra-comparison-select:hover {
+  background-color: var(--color-fill-2) !important;
+  border-radius: 4px !important;
+}

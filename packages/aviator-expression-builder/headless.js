@@ -1,0 +1,2317 @@
+const K = Object.freeze([
+  {
+    name: "sysdate",
+    category: "system",
+    displayName: "当前日期",
+    description: "返回当前日期对象",
+    parameters: [],
+    returnType: "date",
+    example: "sysdate()"
+  },
+  {
+    name: "now",
+    category: "system",
+    displayName: "当前时间戳",
+    description: "返回当前毫秒时间戳",
+    parameters: [],
+    returnType: "number",
+    example: "now()"
+  }
+]), Q = Object.freeze([
+  {
+    name: "assert",
+    category: "system",
+    displayName: "断言函数",
+    description: "当predicate结果为false时抛出异常",
+    parameters: [
+      { name: "predicate", type: "value", required: !0, description: "断言条件", valueType: "boolean" },
+      { name: "msg", type: "value", required: !1, description: "错误信息", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'assert(user.age > 18, "用户未成年")'
+  },
+  {
+    name: "rand",
+    category: "system",
+    displayName: "随机数",
+    description: "返回[0,1)或[0,n)的随机数",
+    parameters: [
+      { name: "n", type: "value", required: !1, description: "上限值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "rand() 或 rand(100)"
+  },
+  {
+    name: "cmp",
+    category: "system",
+    displayName: "比较函数",
+    description: "比较x和y大小，返回0(相等)、1(x>y)或-1(x<y)",
+    parameters: [
+      { name: "x", type: "value", required: !0, description: "比较值1", valueType: "any" },
+      { name: "y", type: "value", required: !0, description: "比较值2", valueType: "any" }
+    ],
+    returnType: "number",
+    example: "cmp(request.size, response.size)"
+  }
+]), J = Object.freeze([
+  {
+    name: "print",
+    category: "system",
+    displayName: "打印对象",
+    description: "打印对象到输出流",
+    parameters: [
+      { name: "obj", type: "value", required: !0, description: "要打印的对象", valueType: "any" }
+    ],
+    returnType: "any",
+    example: "print(user.name)"
+  },
+  {
+    name: "println",
+    category: "system",
+    displayName: "打印并换行",
+    description: "打印对象并换行",
+    parameters: [
+      { name: "obj", type: "value", required: !0, description: "要打印的对象", valueType: "any" }
+    ],
+    returnType: "any",
+    example: "println(user.name)"
+  }
+]), X = Object.freeze([
+  {
+    name: "long",
+    category: "system",
+    displayName: "转换为long",
+    description: "将值转为long类型",
+    parameters: [
+      { name: "v", type: "value", required: !0, description: "要转换的值", valueType: "any" }
+    ],
+    returnType: "number",
+    example: "long(user.age)"
+  },
+  {
+    name: "double",
+    category: "system",
+    displayName: "转换为double",
+    description: "将值转为double类型",
+    parameters: [
+      { name: "v", type: "value", required: !0, description: "要转换的值", valueType: "any" }
+    ],
+    returnType: "number",
+    example: "double(user.salary)"
+  },
+  {
+    name: "boolean",
+    category: "system",
+    displayName: "转换为boolean",
+    description: "将值转为boolean类型",
+    parameters: [
+      { name: "v", type: "value", required: !0, description: "要转换的值", valueType: "any" }
+    ],
+    returnType: "boolean",
+    example: "boolean(user.active)"
+  },
+  {
+    name: "str",
+    category: "system",
+    displayName: "转换为string",
+    description: "将值转为string类型",
+    parameters: [
+      { name: "v", type: "value", required: !0, description: "要转换的值", valueType: "any" }
+    ],
+    returnType: "string",
+    example: "str(user.id)"
+  }
+]), Z = Object.freeze([
+  {
+    name: "type",
+    category: "system",
+    displayName: "获取类型",
+    description: "返回参数的类型",
+    parameters: [
+      { name: "x", type: "value", required: !0, description: "要检查的值", valueType: "any" }
+    ],
+    returnType: "string",
+    example: "type(user.age)"
+  },
+  {
+    name: "is_def",
+    category: "system",
+    displayName: "是否已定义",
+    description: "返回变量是否已定义",
+    parameters: [
+      { name: "x", type: "value", required: !0, description: "要检查的变量", valueType: "any" }
+    ],
+    returnType: "boolean",
+    example: "is_def(user.email)"
+  }
+]), ee = Object.freeze([
+  {
+    name: "max",
+    category: "system",
+    displayName: "最大值",
+    description: "取所有参数中的最大值",
+    parameters: [
+      { name: "x1", type: "value", required: !0, description: "数值1", valueType: "number" },
+      { name: "x2", type: "value", required: !0, description: "数值2", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "max(request.size, response.size)"
+  },
+  {
+    name: "min",
+    category: "system",
+    displayName: "最小值",
+    description: "取所有参数中的最小值",
+    parameters: [
+      { name: "x1", type: "value", required: !0, description: "数值1", valueType: "number" },
+      { name: "x2", type: "value", required: !0, description: "数值2", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "min(request.size, response.size)"
+  }
+]), re = Object.freeze([
+  {
+    name: "load",
+    category: "system",
+    displayName: "加载模块",
+    description: "加载指定路径的模块，每次重新编译",
+    parameters: [
+      { name: "path", type: "value", required: !0, description: "模块路径", valueType: "string" }
+    ],
+    returnType: "any",
+    example: 'load("myModule.av")'
+  },
+  {
+    name: "require",
+    category: "system",
+    displayName: "引入模块",
+    description: "加载指定路径的模块，有缓存机制",
+    parameters: [
+      { name: "path", type: "value", required: !0, description: "模块路径", valueType: "string" }
+    ],
+    returnType: "any",
+    example: 'require("myModule.av")'
+  }
+]), te = Object.freeze([
+  ...K,
+  ...Q,
+  ...J,
+  ...X,
+  ...Z,
+  ...ee,
+  ...re
+]), ne = Object.freeze([
+  {
+    name: "date_to_string",
+    category: "string",
+    displayName: "日期转字符串",
+    description: "将Date对象转化为特定格式的字符串",
+    parameters: [
+      { name: "date", type: "value", required: !0, description: "日期对象", valueType: "any" },
+      { name: "format", type: "value", required: !0, description: "格式字符串", valueType: "string" }
+    ],
+    returnType: "string",
+    example: 'date_to_string(event.time, "yyyy-MM-dd HH:mm:ss")'
+  },
+  {
+    name: "string_to_date",
+    category: "string",
+    displayName: "字符串转日期",
+    description: "将特定格式的字符串转化为Date对象",
+    parameters: [
+      { name: "source", type: "value", required: !0, description: "日期字符串", valueType: "string" },
+      { name: "format", type: "value", required: !0, description: "格式字符串", valueType: "string" }
+    ],
+    returnType: "date",
+    example: 'string_to_date(event.created, "yyyy-MM-dd HH:mm:ss")'
+  }
+]), ae = Object.freeze([
+  {
+    name: "string.contains",
+    category: "string",
+    displayName: "包含字符串",
+    description: "判断s1是否包含s2",
+    parameters: [
+      { name: "s1", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "s2", type: "value", required: !0, description: "要查找的字符串", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'string.contains(request.uri, "/login")'
+  },
+  {
+    name: "string.startsWith",
+    category: "string",
+    displayName: "开头匹配",
+    description: "s1是否以s2开始",
+    parameters: [
+      { name: "s1", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "s2", type: "value", required: !0, description: "前缀字符串", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'string.startsWith(request.uri, "/sso/public")'
+  },
+  {
+    name: "string.endsWith",
+    category: "string",
+    displayName: "结尾匹配",
+    description: "s1是否以s2结尾",
+    parameters: [
+      { name: "s1", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "s2", type: "value", required: !0, description: "后缀字符串", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'string.endsWith(request.uri, ".gif")'
+  }
+]), ie = Object.freeze([
+  {
+    name: "string.length",
+    category: "string",
+    displayName: "字符串长度",
+    description: "求字符串长度",
+    parameters: [
+      { name: "s", type: "value", required: !0, description: "字符串", valueType: "string" }
+    ],
+    returnType: "number",
+    example: "string.length(request.uri)"
+  },
+  {
+    name: "string.indexOf",
+    category: "string",
+    displayName: "查找位置",
+    description: "求s2在s1中的起始索引位置",
+    parameters: [
+      { name: "s1", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "s2", type: "value", required: !0, description: "要查找的字符串", valueType: "string" }
+    ],
+    returnType: "number",
+    example: 'string.indexOf(request.uri, "/api")'
+  },
+  {
+    name: "string.lastIndexOf",
+    category: "string",
+    displayName: "最后查找位置",
+    description: "查找字符串最后出现的位置",
+    parameters: [
+      { name: "str", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "searchStr", type: "value", required: !0, description: "搜索字符串", valueType: "string" }
+    ],
+    returnType: "number",
+    example: 'string.lastIndexOf(request.uri, "/")'
+  },
+  {
+    name: "string.substring",
+    category: "string",
+    displayName: "截取字符串",
+    description: "截取字符串s,从begin到end",
+    parameters: [
+      { name: "s", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "begin", type: "value", required: !0, description: "开始位置", valueType: "number" },
+      { name: "end", type: "value", required: !1, description: "结束位置", valueType: "number" }
+    ],
+    returnType: "string",
+    example: "string.substring(request.uri, 0, 10)"
+  }
+]), se = Object.freeze([
+  {
+    name: "string.split",
+    category: "string",
+    displayName: "字符串分割",
+    description: "Java里的String.split方法",
+    parameters: [
+      { name: "target", type: "value", required: !0, description: "目标字符串", valueType: "string" },
+      { name: "regex", type: "value", required: !0, description: "分割正则", valueType: "string" },
+      { name: "limit", type: "value", required: !1, description: "限制数量", valueType: "number" }
+    ],
+    returnType: "array",
+    example: 'string.split(request.uri, "/")'
+  },
+  {
+    name: "string.join",
+    category: "string",
+    displayName: "字符串连接",
+    description: "将集合里的元素以分隔符连接起来形成字符串",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "separator", type: "value", required: !0, description: "分隔符", valueType: "string" }
+    ],
+    returnType: "string",
+    example: 'string.join(headers, ",")'
+  },
+  {
+    name: "string.replace_first",
+    category: "string",
+    displayName: "替换首次匹配",
+    description: "Java里的String.replaceFirst方法",
+    parameters: [
+      { name: "s", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "regex", type: "value", required: !0, description: "正则表达式", valueType: "string" },
+      { name: "replacement", type: "value", required: !0, description: "替换字符串", valueType: "string" }
+    ],
+    returnType: "string",
+    example: 'string.replace_first(request.uri, "/api/", "/new/")'
+  },
+  {
+    name: "string.replace_all",
+    category: "string",
+    displayName: "替换所有匹配",
+    description: "Java里的String.replaceAll方法",
+    parameters: [
+      { name: "s", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "regex", type: "value", required: !0, description: "正则表达式", valueType: "string" },
+      { name: "replacement", type: "value", required: !0, description: "替换字符串", valueType: "string" }
+    ],
+    returnType: "string",
+    example: 'string.replace_all(request.uri, "/api/", "/new/")'
+  }
+]), ue = Object.freeze([
+  {
+    name: "string.match",
+    category: "string",
+    displayName: "正则匹配",
+    description: "字符串正则匹配函数，返回匹配到的字符串内容，匹配失败时返回nil",
+    parameters: [
+      { name: "regex", type: "value", required: !0, description: "正则表达式", valueType: "string" },
+      { name: "str", type: "value", required: !0, description: "源字符串", valueType: "string" },
+      { name: "flags", type: "value", required: !1, description: "匹配标志", valueType: "string" }
+    ],
+    returnType: "string",
+    example: 'string.match("^/api/.*", request.uri, 0)'
+  }
+]), le = Object.freeze([
+  ...ne,
+  ...ae,
+  ...ie,
+  ...se,
+  ...ue
+]), oe = Object.freeze([
+  {
+    name: "math.abs",
+    category: "math",
+    displayName: "绝对值",
+    description: "求d的绝对值",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.abs(response.latency)"
+  },
+  {
+    name: "math.round",
+    category: "math",
+    displayName: "四舍五入",
+    description: "四舍五入",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.round(response.latency)"
+  },
+  {
+    name: "math.floor",
+    category: "math",
+    displayName: "向下取整",
+    description: "向下取整",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.floor(response.latency)"
+  },
+  {
+    name: "math.ceil",
+    category: "math",
+    displayName: "向上取整",
+    description: "向上取整",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.ceil(response.latency)"
+  }
+]), pe = Object.freeze([
+  {
+    name: "math.sqrt",
+    category: "math",
+    displayName: "平方根",
+    description: "求d的平方根",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.sqrt(request.size)"
+  },
+  {
+    name: "math.pow",
+    category: "math",
+    displayName: "幂运算",
+    description: "求d1的d2次方",
+    parameters: [
+      { name: "d1", type: "value", required: !0, description: "底数", valueType: "number" },
+      { name: "d2", type: "value", required: !0, description: "指数", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.pow(request.size, 2)"
+  },
+  {
+    name: "math.log",
+    category: "math",
+    displayName: "自然对数",
+    description: "求d的自然对数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.log(request.size)"
+  },
+  {
+    name: "math.log10",
+    category: "math",
+    displayName: "常用对数",
+    description: "求d以10为底的对数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.log10(request.size)"
+  }
+]), ce = Object.freeze([
+  {
+    name: "math.sin",
+    category: "math",
+    displayName: "正弦函数",
+    description: "正弦函数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "角度（弧度）", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.sin(angle)"
+  },
+  {
+    name: "math.cos",
+    category: "math",
+    displayName: "余弦函数",
+    description: "余弦函数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "角度（弧度）", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.cos(angle)"
+  },
+  {
+    name: "math.tan",
+    category: "math",
+    displayName: "正切函数",
+    description: "正切函数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "角度（弧度）", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.tan(angle)"
+  },
+  {
+    name: "math.atan",
+    category: "math",
+    displayName: "反正切函数",
+    description: "反正切函数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.atan(value)"
+  },
+  {
+    name: "math.acos",
+    category: "math",
+    displayName: "反余弦函数",
+    description: "反余弦函数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.acos(value)"
+  },
+  {
+    name: "math.asin",
+    category: "math",
+    displayName: "反正弦函数",
+    description: "反正弦函数",
+    parameters: [
+      { name: "d", type: "value", required: !0, description: "数值", valueType: "number" }
+    ],
+    returnType: "number",
+    example: "math.asin(value)"
+  }
+]), ye = Object.freeze([
+  ...oe,
+  ...pe,
+  ...ce
+]), L = Object.freeze([
+  {
+    name: "seq.list",
+    category: "sequence",
+    displayName: "创建列表",
+    description: "创建一个ArrayList实例",
+    parameters: [
+      { name: "items", type: "value", required: !0, description: "列表元素（逗号分隔）", valueType: "array" }
+    ],
+    returnType: "list",
+    example: 'seq.list("GET", "POST", "PUT")'
+  }
+]), U = Object.freeze([
+  {
+    name: "seq.array",
+    category: "sequence",
+    displayName: "创建数组",
+    description: "创建指定类型的数组",
+    parameters: [
+      { name: "clazz", type: "value", required: !0, description: "数组类型", valueType: "string" },
+      { name: "elements", type: "value", required: !1, description: "数组元素", valueType: "array" }
+    ],
+    returnType: "array",
+    example: 'seq.array("String", "a", "b", "c")'
+  },
+  {
+    name: "seq.set",
+    category: "sequence",
+    displayName: "创建集合",
+    description: "创建HashSet实例",
+    parameters: [
+      { name: "elements", type: "value", required: !1, description: "集合元素", valueType: "array" }
+    ],
+    returnType: "set",
+    example: 'seq.set("admin", "user", "guest")'
+  },
+  {
+    name: "seq.map",
+    category: "sequence",
+    displayName: "创建映射",
+    description: "创建HashMap实例",
+    parameters: [
+      { name: "pairs", type: "value", required: !1, description: "键值对", valueType: "array" }
+    ],
+    returnType: "map",
+    example: 'seq.map("key1", "value1", "key2", "value2")'
+  }
+]);
+Object.freeze([
+  ...L,
+  ...U
+]);
+const me = Object.freeze([
+  {
+    name: "seq.contains_key",
+    category: "sequence",
+    displayName: "包含键",
+    description: "当map中存在key时返回true",
+    parameters: [
+      { name: "map", type: "value", required: !0, description: "映射对象", valueType: "any" },
+      { name: "key", type: "value", required: !0, description: "键", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'seq.contains_key(request.headers, "authorization")'
+  },
+  {
+    name: "seq.get",
+    category: "sequence",
+    displayName: "获取元素",
+    description: "从list、数组或hash-map获取对应的元素值",
+    parameters: [
+      { name: "coll", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "element", type: "value", required: !0, description: "索引或键", valueType: "string" }
+    ],
+    returnType: "any",
+    example: 'seq.get(request.headers, "user-agent")'
+  },
+  {
+    name: "include",
+    category: "sequence",
+    displayName: "包含元素",
+    description: "判断element是否在集合seq中",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "list" },
+      { name: "element", type: "value", required: !0, description: "要查找的元素", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'include(seq.list("admin", "user"), user.role)'
+  },
+  {
+    name: "count",
+    category: "sequence",
+    displayName: "集合大小",
+    description: "返回集合大小",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" }
+    ],
+    returnType: "number",
+    example: "count(request.headers)"
+  }
+]), de = Object.freeze([
+  {
+    name: "seq.keys",
+    category: "sequence",
+    displayName: "获取键集合",
+    description: "返回map的key集合",
+    parameters: [
+      { name: "m", type: "value", required: !0, description: "映射对象", valueType: "any" }
+    ],
+    returnType: "set",
+    example: "seq.keys(request.headers)"
+  },
+  {
+    name: "seq.vals",
+    category: "sequence",
+    displayName: "获取值集合",
+    description: "返回map的value集合",
+    parameters: [
+      { name: "m", type: "value", required: !0, description: "映射对象", valueType: "any" }
+    ],
+    returnType: "list",
+    example: "seq.vals(request.headers)"
+  }
+]), fe = Object.freeze([
+  {
+    name: "seq.add",
+    category: "sequence",
+    displayName: "添加元素",
+    description: "往集合添加元素",
+    parameters: [
+      { name: "coll", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "element", type: "value", required: !0, description: "要添加的元素", valueType: "string" }
+    ],
+    returnType: "any",
+    example: 'seq.add(userList, "newUser")'
+  },
+  {
+    name: "seq.remove",
+    category: "sequence",
+    displayName: "删除元素",
+    description: "从集合删除元素",
+    parameters: [
+      { name: "coll", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "element", type: "value", required: !0, description: "要删除的元素", valueType: "string" }
+    ],
+    returnType: "any",
+    example: 'seq.remove(userList, "oldUser")'
+  }
+]), ge = Object.freeze([
+  {
+    name: "map",
+    category: "sequence",
+    displayName: "映射函数",
+    description: "将函数作用到集合每个元素",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "fun", type: "value", required: !0, description: "函数", valueType: "string" }
+    ],
+    returnType: "list",
+    example: "map(numbers, lambda(x) -> x * 2) end"
+  },
+  {
+    name: "filter",
+    category: "sequence",
+    displayName: "过滤函数",
+    description: "过滤集合中满足条件的元素",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "predicate", type: "value", required: !0, description: "谓词函数", valueType: "string" }
+    ],
+    returnType: "list",
+    example: "filter(numbers, lambda(x) -> x > 10) end"
+  },
+  {
+    name: "sort",
+    category: "sequence",
+    displayName: "排序",
+    description: "排序集合，仅对数组和List有效",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "comparator", type: "value", required: !1, description: "比较器", valueType: "string" }
+    ],
+    returnType: "list",
+    example: "sort(numbers) 或 sort(users, comparator(lambda(a, b) -> a.age - b.age end))"
+  },
+  {
+    name: "reverse",
+    category: "sequence",
+    displayName: "逆序",
+    description: "将集合元素逆序",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" }
+    ],
+    returnType: "list",
+    example: "reverse(numbers)"
+  },
+  {
+    name: "distinct",
+    category: "sequence",
+    displayName: "去重",
+    description: "返回去重后的结果集合",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" }
+    ],
+    returnType: "list",
+    example: "distinct(numbers)"
+  },
+  {
+    name: "concat",
+    category: "sequence",
+    displayName: "连接集合",
+    description: "连接两个集合",
+    parameters: [
+      { name: "seq1", type: "value", required: !0, description: "集合1", valueType: "any" },
+      { name: "seq2", type: "value", required: !0, description: "集合2", valueType: "any" }
+    ],
+    returnType: "list",
+    example: "concat(list1, list2)"
+  }
+]), ve = Object.freeze([
+  {
+    name: "repeat",
+    category: "sequence",
+    displayName: "重复元素",
+    description: "返回将元素x重复n次的List",
+    parameters: [
+      { name: "n", type: "value", required: !0, description: "重复次数", valueType: "number" },
+      { name: "x", type: "value", required: !0, description: "要重复的元素", valueType: "string" }
+    ],
+    returnType: "list",
+    example: 'repeat(3, "hello")'
+  },
+  {
+    name: "repeatedly",
+    category: "sequence",
+    displayName: "重复调用函数",
+    description: "返回将函数f重复调用n次结果的List",
+    parameters: [
+      { name: "n", type: "value", required: !0, description: "调用次数", valueType: "number" },
+      { name: "f", type: "value", required: !0, description: "要调用的函数", valueType: "string" }
+    ],
+    returnType: "list",
+    example: "repeatedly(3, lambda() -> rand() end)"
+  },
+  {
+    name: "reduce",
+    category: "sequence",
+    displayName: "归约函数",
+    description: "将函数作用在结果值和集合每个元素上",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" },
+      { name: "fun", type: "value", required: !0, description: "归约函数", valueType: "string" },
+      { name: "init", type: "value", required: !0, description: "初始值", valueType: "number" }
+    ],
+    returnType: "any",
+    example: "reduce(numbers, lambda(acc, x) -> acc + x end, 0)"
+  }
+]), Te = Object.freeze([
+  ...ge,
+  ...ve
+]), be = Object.freeze([
+  {
+    name: "is_empty",
+    category: "sequence",
+    displayName: "集合是否为空",
+    description: "当集合为空或nil时返回true",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合或数组", valueType: "list" }
+    ],
+    returnType: "boolean",
+    example: "is_empty(userList)"
+  },
+  {
+    name: "is_distinct",
+    category: "sequence",
+    displayName: "是否无重复",
+    description: "当seq没有重复元素时返回true",
+    parameters: [
+      { name: "seq", type: "value", required: !0, description: "集合", valueType: "any" }
+    ],
+    returnType: "boolean",
+    example: "is_distinct(userIds)"
+  }
+]), Ne = Object.freeze([
+  ...L,
+  ...me,
+  ...U,
+  ...de,
+  ...fe,
+  ...Te,
+  ...be
+]), he = Object.freeze([
+  {
+    name: "datetime.dateStrToMilliSecond",
+    category: "datetime",
+    displayName: "日期转毫秒",
+    description: "将日期字符串转换为毫秒时间戳",
+    parameters: [
+      { name: "dateStr", type: "value", required: !0, description: "日期字符串", valueType: "string" },
+      { name: "format", type: "value", required: !1, description: "日期格式", valueType: "string" },
+      { name: "timezone", type: "value", required: !1, description: "时区", valueType: "string" }
+    ],
+    returnType: "number",
+    example: 'datetime.dateStrToMilliSecond(event.created, "yyyy-MM-dd HH:mm:ss")'
+  },
+  {
+    name: "datetime.milliSecondToDate",
+    category: "datetime",
+    displayName: "毫秒转日期",
+    description: "将毫秒时间戳转换为LocalDate",
+    parameters: [
+      { name: "milliSecond", type: "value", required: !0, description: "毫秒时间戳", valueType: "number" }
+    ],
+    returnType: "date",
+    example: "datetime.milliSecondToDate(event.timestamp)"
+  }
+]), Ee = Object.freeze([
+  {
+    name: "datetime.isSameDay",
+    category: "datetime",
+    displayName: "同一天判断",
+    description: "判断两个时间戳是否是同一天",
+    parameters: [
+      { name: "second1", type: "value", required: !0, description: "时间戳1（秒）", valueType: "number" },
+      { name: "second2", type: "value", required: !0, description: "时间戳2（秒）", valueType: "number" }
+    ],
+    returnType: "boolean",
+    example: "datetime.isSameDay(event.created, event.updated)"
+  },
+  {
+    name: "datetime.isAfterDay",
+    category: "datetime",
+    displayName: "日期晚于判断",
+    description: "判断第一个日期是否晚于第二个日期",
+    parameters: [
+      { name: "date1", type: "value", required: !0, description: "日期1", valueType: "any" },
+      { name: "date2", type: "value", required: !0, description: "日期2", valueType: "any" }
+    ],
+    returnType: "boolean",
+    example: "datetime.isAfterDay(event.created, event.baseline)"
+  },
+  {
+    name: "datetime.isBeforeDay",
+    category: "datetime",
+    displayName: "日期早于判断",
+    description: "判断第一个日期是否早于第二个日期",
+    parameters: [
+      { name: "date1", type: "value", required: !0, description: "日期1", valueType: "any" },
+      { name: "date2", type: "value", required: !0, description: "日期2", valueType: "any" }
+    ],
+    returnType: "boolean",
+    example: "datetime.isBeforeDay(event.created, event.deadline)"
+  }
+]), qe = Object.freeze([
+  {
+    name: "datetime.strToLocalDate",
+    category: "datetime",
+    displayName: "字符串转LocalDate",
+    description: "将日期字符串转换为LocalDate",
+    parameters: [
+      { name: "dateStr", type: "value", required: !0, description: "日期字符串", valueType: "string" }
+    ],
+    returnType: "date",
+    example: "datetime.strToLocalDate(event.dateString)"
+  }
+]), xe = Object.freeze([
+  ...he,
+  ...Ee,
+  ...qe
+]), Ie = Object.freeze([
+  {
+    name: "user.getUserStatus",
+    category: "custom",
+    displayName: "获取用户状态",
+    description: "根据员工ID获取用户状态",
+    parameters: [
+      { name: "emplid", type: "value", required: !0, description: "员工ID", valueType: "string" }
+    ],
+    returnType: "number",
+    example: "user.getUserStatus(user.emplid)"
+  },
+  {
+    name: "user.getUserEmplidByEmail",
+    category: "custom",
+    displayName: "邮箱获取员工ID",
+    description: "根据邮箱获取员工ID",
+    parameters: [
+      { name: "email", type: "value", required: !0, description: "邮箱地址", valueType: "string" }
+    ],
+    returnType: "string",
+    example: "user.getUserEmplidByEmail(user.email)"
+  }
+]), Se = Object.freeze([
+  {
+    name: "ipUser.getUser",
+    category: "custom",
+    displayName: "获取IP用户信息",
+    description: "根据IP获取用户信息",
+    parameters: [
+      { name: "ip", type: "value", required: !0, description: "IP地址", valueType: "string" },
+      { name: "timestamp", type: "value", required: !1, description: "时间戳（秒）", valueType: "number" }
+    ],
+    returnType: "object",
+    example: "ipUser.getUser(client_ip, event.timestamp)"
+  }
+]), Oe = Object.freeze([
+  {
+    name: "intelligence.ifWhiteIp",
+    category: "custom",
+    displayName: "IP白名单检查",
+    description: "检查IP是否在白名单中",
+    parameters: [
+      { name: "ip", type: "value", required: !0, description: "IP地址", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "intelligence.ifWhiteIp(client_ip)"
+  },
+  {
+    name: "intelligence.ifBlackIp",
+    category: "custom",
+    displayName: "IP黑名单检查",
+    description: "检查IP是否在黑名单中",
+    parameters: [
+      { name: "ip", type: "value", required: !0, description: "IP地址", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "intelligence.ifBlackIp(client_ip)"
+  },
+  {
+    name: "intelligence.ifBlackDomain",
+    category: "custom",
+    displayName: "域名黑名单检查",
+    description: "检查域名是否在黑名单中",
+    parameters: [
+      { name: "domain", type: "value", required: !0, description: "域名", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "intelligence.ifBlackDomain(request.host)"
+  },
+  {
+    name: "intelligence.ifBlackUrl",
+    category: "custom",
+    displayName: "URL黑名单检查",
+    description: "检查URL是否在黑名单中",
+    parameters: [
+      { name: "url", type: "value", required: !0, description: "URL地址", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "intelligence.ifBlackUrl(request.uri)"
+  },
+  {
+    name: "intelligence.ifBlackHash",
+    category: "custom",
+    displayName: "Hash黑名单检查",
+    description: "检查Hash是否在黑名单中",
+    parameters: [
+      { name: "hash", type: "value", required: !0, description: "Hash值", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "intelligence.ifBlackHash(file.hash)"
+  },
+  {
+    name: "intelligence.checkIfInnerIp",
+    category: "custom",
+    displayName: "内网IP检查",
+    description: "检查IP是否为内网IP",
+    parameters: [
+      { name: "ip", type: "value", required: !0, description: "IP地址", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "intelligence.checkIfInnerIp(client_ip)"
+  }
+]), Ce = Object.freeze([
+  {
+    name: "isTimeInRange.isTimestampInRange",
+    category: "custom",
+    displayName: "时间范围检查",
+    description: "检查时间戳是否在指定时间范围内",
+    parameters: [
+      { name: "country", type: "value", required: !0, description: "国家", valueType: "string" },
+      { name: "timestamp", type: "value", required: !0, description: "时间戳", valueType: "number" },
+      { name: "startTime", type: "value", required: !0, description: "开始时间", valueType: "number" },
+      { name: "endTime", type: "value", required: !0, description: "结束时间", valueType: "number" }
+    ],
+    returnType: "boolean",
+    example: 'isTimeInRange.isTimestampInRange("CN", event.timestamp, 9, 18)'
+  }
+]), _e = Object.freeze([
+  {
+    name: "IPScene.isIpInNetmaskList",
+    category: "custom",
+    displayName: "IP网段列表检查",
+    description: "检查IP是否在指定网段列表中的任意一个",
+    parameters: [
+      { name: "ip", type: "value", required: !0, description: "IP地址", valueType: "string" },
+      { name: "netmaskList", type: "value", required: !0, description: "网段列表", valueType: "list" }
+    ],
+    returnType: "boolean",
+    example: 'IPScene.isIpInNetmaskList(client_ip, seq.list("10.128.16.0/20", "10.128.16.0/23"))'
+  },
+  {
+    name: "IPScene.isIoaIP",
+    category: "custom",
+    displayName: "IOA IP检查",
+    description: "检查是否为IOA IP",
+    parameters: [
+      { name: "ip", type: "value", required: !0, description: "IP地址", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: "IPScene.isIoaIP(client_ip)"
+  }
+]), Fe = Object.freeze([
+  {
+    name: "filter.checkInWhiteList",
+    category: "custom",
+    displayName: "白名单检查",
+    description: "检查值是否在白名单中",
+    parameters: [
+      { name: "whiteType", type: "value", required: !0, description: "白名单类型", valueType: "string" },
+      { name: "value", type: "value", required: !0, description: "检查值", valueType: "string" }
+    ],
+    returnType: "boolean",
+    example: 'filter.checkInWhiteList("domain", request.host)'
+  }
+]), Ae = Object.freeze([
+  {
+    name: "enhance.getValue",
+    category: "custom",
+    displayName: "获取路径值",
+    description: "获取包含特殊字符的路径字段值",
+    parameters: [
+      { name: "path", type: "value", required: !0, description: "字段路径", valueType: "string" }
+    ],
+    returnType: "any",
+    example: 'enhance.getValue("a-b.c-d")'
+  }
+]), Re = Object.freeze([
+  ...Ie,
+  ...Se,
+  ...Oe,
+  ...Ce,
+  ..._e,
+  ...Fe,
+  ...Ae
+]), f = Object.freeze([
+  ...te,
+  ...le,
+  ...ye,
+  ...Ne,
+  ...xe,
+  ...Re
+]), Ot = Object.freeze({
+  boolean: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" }
+  ],
+  string: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: "== nil", value: "== nil", symbol: "== nil" },
+    { label: "!= nil", value: "!= nil", symbol: "!= nil" },
+    { label: "== ''", value: "== ''", symbol: "== ''" },
+    { label: "!= ''", value: "!= ''", symbol: "!= ''" },
+    { label: "contains", value: "contains", symbol: "contains" },
+    { label: "regex", value: "match", symbol: "regex" },
+    { label: "startsWith", value: "startsWith", symbol: "startsWith" },
+    { label: "endsWith", value: "endsWith", symbol: "endsWith" }
+  ],
+  number: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: ">", value: ">", symbol: ">" },
+    { label: ">=", value: ">=", symbol: ">=" },
+    { label: "<", value: "<", symbol: "<" },
+    { label: "<=", value: "<=", symbol: "<=" },
+    { label: "== nil", value: "== nil", symbol: "== nil" },
+    { label: "!= nil", value: "!= nil", symbol: "!= nil" }
+  ],
+  ip: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: "== nil", value: "== nil", symbol: "== nil" },
+    { label: "!= nil", value: "!= nil", symbol: "!= nil" },
+    { label: "== ''", value: "== ''", symbol: "== ''" },
+    { label: "!= ''", value: "!= ''", symbol: "!= ''" },
+    { label: "contains", value: "contains", symbol: "contains" },
+    { label: "regex", value: "match", symbol: "regex" },
+    { label: "startsWith", value: "startsWith", symbol: "startsWith" },
+    { label: "endsWith", value: "endsWith", symbol: "endsWith" },
+    { label: "isIpInNetmaskList", value: "isIpInNetmaskList", symbol: "isIpInNetmaskList" }
+  ],
+  url: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: "== nil", value: "== nil", symbol: "== nil" },
+    { label: "!= nil", value: "!= nil", symbol: "!= nil" }
+  ],
+  email: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: "== nil", value: "== nil", symbol: "== nil" },
+    { label: "!= nil", value: "!= nil", symbol: "!= nil" }
+  ],
+  uuid: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: "== nil", value: "== nil", symbol: "== nil" },
+    { label: "!= nil", value: "!= nil", symbol: "!= nil" }
+  ],
+  datetime: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: ">", value: ">", symbol: ">" },
+    { label: ">=", value: ">=", symbol: ">=" },
+    { label: "<", value: "<", symbol: "<" },
+    { label: "<=", value: "<=", symbol: "<=" }
+  ],
+  array: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" },
+    { label: "belong", value: "belong", symbol: "belong" }
+  ],
+  object: [
+    { label: "==", value: "==", symbol: "==" },
+    { label: "!=", value: "!=", symbol: "!=" }
+  ]
+});
+function k() {
+  return `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+function g(e, r = 0) {
+  return {
+    id: k(),
+    type: "condition",
+    level: r,
+    parentId: e,
+    field: "",
+    comparison: "==",
+    value: ""
+  };
+}
+function _(e, r = 0) {
+  return {
+    id: k(),
+    type: "group",
+    level: r,
+    parentId: e,
+    operator: "AND",
+    children: [],
+    expanded: !0
+  };
+}
+function Le(e, r, t) {
+  if ([
+    { func: "map", param: "fun" },
+    { func: "filter", param: "predicate" },
+    { func: "sort", param: "comparator" },
+    { func: "repeatedly", param: "f" },
+    { func: "reduce", param: "fun" }
+  ].some((a) => a.func === e && a.param === r))
+    return !0;
+  if (t) {
+    const a = t.toLowerCase();
+    if (a.includes("函数") || a.includes("谓词") || a.includes("比较器") || a.includes("lambda") || a.includes("匿名函数") || a.includes("匿名") || a.includes("回调"))
+      return !0;
+  }
+  if (r) {
+    const a = r.toLowerCase();
+    if (a === "fun" || a === "predicate" || a === "comparator" || a === "callback" || a === "f" || a === "fn")
+      return !0;
+  }
+  return !1;
+}
+function Ue(e) {
+  return !e || typeof e != "object" || Array.isArray(e) ? !1 : Object.keys(e).length > 1;
+}
+function ke(e) {
+  return e == null ? "null" : Array.isArray(e) ? "array" : typeof e == "object" ? "object" : typeof e == "number" ? "number" : typeof e == "boolean" ? "boolean" : typeof e == "string" ? /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(e) ? "datetime" : /^\d+\.\d+\.\d+\.\d+$/.test(e) ? "ip" : e.includes("@") && e.includes(".") && !e.includes(" ") ? "email" : /^https?:\/\//.test(e) ? "url" : /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(e) ? "uuid" : e.length > 50 && /^[A-Z0-9+/=.]+$/i.test(e) ? "token" : "string" : "unknown";
+}
+function Me(e) {
+  return e == null ? "nil" : Array.isArray(e) ? `[${e.length} items]` : typeof e == "object" ? "{object}" : typeof e == "string" && e.length > 20 ? `"${e.substring(0, 20)}..."` : String(e);
+}
+const F = [
+  "ip_user",
+  "token_user",
+  "client_ip",
+  "uuid",
+  "response.status",
+  "request.method",
+  "request.uri",
+  "request.url",
+  "service_id",
+  "upstream",
+  "latency",
+  "start_time",
+  "user",
+  "username",
+  "id",
+  "status",
+  "time",
+  "timestamp"
+];
+function Pe(e) {
+  return e.sort((r, t) => {
+    const n = F.findIndex(
+      (u) => r.value === u || r.value.toLowerCase().includes(u.toLowerCase())
+    ), a = F.findIndex(
+      (u) => t.value === u || t.value.toLowerCase().includes(u.toLowerCase())
+    );
+    if (n !== -1 && a !== -1)
+      return n - a;
+    if (n !== -1)
+      return -1;
+    if (a !== -1)
+      return 1;
+    const s = r.value.split(".").length, i = t.value.split(".").length;
+    return s !== i ? s - i : r.value.localeCompare(t.value);
+  });
+}
+function q(e, r = "", t = 8, n = 0) {
+  if (n >= t || e === null || e === void 0)
+    return [];
+  const a = [];
+  if (Array.isArray(e))
+    return e.length > 0 ? q(e[0], r, t, n + 1) : a;
+  if (typeof e == "object") {
+    const s = e;
+    Object.keys(s).forEach((i) => {
+      const u = r ? `${r}.${i}` : i, l = s[i];
+      if (Ue(l) || a.push({
+        label: u,
+        value: u,
+        type: ke(l),
+        example: Me(l)
+      }), l && typeof l == "object") {
+        const p = q(l, u, t, n + 1);
+        a.push(...p);
+      }
+    });
+  }
+  return a;
+}
+function Ct(e) {
+  if (!e || e.trim() === "" || e.trim() === "{}")
+    return [];
+  try {
+    const r = JSON.parse(e), n = q(r).filter((a) => a.type !== "object" && a.type !== "null");
+    return Pe(n);
+  } catch {
+    return [];
+  }
+}
+function $e(e, r, t) {
+  return e === "contains" ? `string.contains(${r}, ${t})` : e === "startsWith" ? `string.startsWith(${r}, ${t})` : e === "endsWith" ? `string.endsWith(${r}, ${t})` : null;
+}
+function De(e, r) {
+  const t = r.parameterDataTypes.get(e.id);
+  return (t == null ? void 0 : t.get("condition_value")) || "string";
+}
+function I(e, r) {
+  return De(e, r);
+}
+function je(e) {
+  const r = e.match(/^([a-z_][\w.]*)\s*\(/i);
+  return r ? f.some((t) => t.name === r[1]) : !1;
+}
+function we(e, r) {
+  const t = e.value, n = I(e, r);
+  if (typeof t == "string" && t !== "nil" && t !== "") {
+    if (e.valueIsLiteral === !0)
+      return n === "number" || n === "boolean" ? t : !t.startsWith('"') && !t.startsWith("'") ? `"${t}"` : t;
+    const a = r.availableFields.some((i) => i.value === t), s = e.valueIsField === !0;
+    return a || je(t) || s || n === "number" || n === "boolean" ? t : !t.startsWith('"') && !t.startsWith("'") ? `"${t}"` : t;
+  }
+  return typeof t == "number" ? n === "string" ? `"${t}"` : String(t) : typeof t == "boolean" ? String(t) : t;
+}
+function ze(e) {
+  if (Array.isArray(e))
+    return e;
+  if (typeof e != "string")
+    return [];
+  try {
+    const r = JSON.parse(e);
+    return Array.isArray(r) ? r : [e];
+  } catch {
+    return [e];
+  }
+}
+function We(e, r) {
+  return e.map((t) => r === "number" || r === "boolean" ? String(t) : typeof t == "string" ? `"${t}"` : `"${String(t)}"`).join(", ");
+}
+function M(e, r) {
+  return We(ze(e), r);
+}
+function Be(e, r) {
+  const t = I(e, r), n = M(e.value, t), a = `seq.some(${e.field}, lambda(x) -> include(seq.list(${n}), x) end)`;
+  return e.isNegated ? `${a} == nil` : `${a} != nil`;
+}
+function Ve(e, r) {
+  const t = I(e, r), n = M(e.value, t), a = `IPScene.isIpInNetmaskList(${e.field}, seq.list(${n}))`;
+  return e.isNegated ? `!${a}` : a;
+}
+function Ge(e, r, t) {
+  const n = `string.match(${e}, ${r}, 0)`;
+  return t ? `${n} == nil` : `${n} != nil`;
+}
+function He(e) {
+  const { node: r, context: t, formattedValue: n } = e;
+  return r.comparison === "isIpInNetmaskList" ? Ve(r, t) : r.comparison === "belong" ? Be(r, t) : r.comparison === "match" ? Ge(n, r.field || "", r.isNegated) : null;
+}
+function Ye(e, r) {
+  if (!e.field || !e.comparison)
+    return "";
+  if (e.value === void 0 || e.value === null) {
+    const i = `${e.field} ${e.comparison}`;
+    return e.isNegated ? `!(${i})` : i;
+  }
+  const t = we(e, r), n = He({
+    node: e,
+    context: r,
+    formattedValue: t
+  });
+  if (n)
+    return n;
+  const s = $e(e.comparison, e.field, t) ?? `${e.field} ${e.comparison} ${t}`;
+  return e.isNegated ? `!(${s})` : s;
+}
+const Ke = /* @__PURE__ */ new Set(["== nil", "!= nil", "== ''", "!= ''"]);
+function Qe(e) {
+  return typeof e == "string" && e.includes("lambda(") && e.includes("end");
+}
+function Je(e) {
+  return e.isNested && e.nestedNode ? !0 : e.value !== void 0 && e.value !== "";
+}
+function Xe(e, r) {
+  let t = e.type || "value";
+  try {
+    t === "value" && typeof e.value == "string" && e.value && r.availableFields.some((n) => n.value === e.value) && (t = "field");
+  } catch (n) {
+    const a = n instanceof Error ? n.message : String(n);
+    console.warn("⚠️ 字段检测失败:", a);
+  }
+  return t;
+}
+function Ze(e, r, t, n, a) {
+  if (r.isNested && r.nestedNode)
+    return n(r.nestedNode, t);
+  const s = Xe(r, t);
+  if (r.value === void 0 || r.value === "" || s !== "value" || Qe(r.value) || Array.isArray(r.value) && a.expandArrayValueParameters)
+    return r.value;
+  const i = t.parameterDataTypes.get(e.id), u = (i == null ? void 0 : i.get(r.name || "")) || r.valueType || "string";
+  return typeof r.value == "string" ? u === "number" || u === "boolean" ? r.value : !r.value.startsWith('"') && !r.value.startsWith("'") ? `"${r.value}"` : r.value : typeof r.value == "number" ? u === "string" ? `"${r.value}"` : String(r.value) : typeof r.value == "boolean" ? String(r.value) : r.value;
+}
+function er(e) {
+  const r = [];
+  return e.forEach((t) => {
+    if (Array.isArray(t)) {
+      t.forEach((n) => {
+        typeof n == "string" ? r.push(`"${n}"`) : r.push(String(n));
+      });
+      return;
+    }
+    r.push(String(t));
+  }), r.join(", ");
+}
+function rr(e, r) {
+  return r.expandArrayValueParameters ? er(e) : e.join(", ");
+}
+function tr(e, r, t, n = {}) {
+  if (!e.functionName || !e.parameters)
+    return "";
+  const a = e.parameters.filter(Je).map((s) => Ze(e, s, r, t, n));
+  return `${e.functionName}(${rr(a, n)})`;
+}
+function nr(e) {
+  return e ? Ke.has(e) : !1;
+}
+function ar(e) {
+  const { userSelectedDataType: r, treatAsField: t = !1 } = e;
+  let { value: n } = e;
+  return typeof n == "string" && n !== "nil" && n !== "" ? (t || r === "number" || r === "boolean" || !n.startsWith('"') && !n.startsWith("'") && (n = `"${n}"`), n) : typeof n == "number" ? r === "string" ? `"${n}"` : String(n) : typeof n == "boolean" ? String(n) : n;
+}
+const ir = new Map(f.map((e) => [e.name, e.returnType]));
+function sr(e) {
+  return e ? ir.get(e) === "boolean" : !1;
+}
+function A(e, r, t) {
+  return r.isNegated ? t === "boolean-only" ? `!${e}` : t === "wrap-final" ? `!(${e})` : e : e;
+}
+function P(e, r, t, n = {}) {
+  if (!e.functionName || !e.parameters)
+    return "";
+  const a = tr(e, r, t, n.call);
+  if (sr(e.functionName))
+    return A(a, e, n.negationStrategy);
+  let i = a;
+  if (e.comparison) {
+    if (nr(e.comparison))
+      i = `${a} ${e.comparison}`;
+    else if (e.value !== void 0 && e.value !== "") {
+      const u = r.parameterDataTypes.get(e.id), l = e.functionName || "condition_value", p = (u == null ? void 0 : u.get(l)) || "string", y = ar({
+        value: e.value,
+        userSelectedDataType: p,
+        treatAsField: n.treatComparisonValueAsField
+      });
+      i = `${a} ${e.comparison} ${y}`;
+    }
+  }
+  return n.negationStrategy === "wrap-final" ? A(i, e, n.negationStrategy) : i;
+}
+function ur(e, r, t) {
+  return P(e, r, t, {
+    call: {
+      expandArrayValueParameters: !0
+    },
+    treatComparisonValueAsField: e.valueIsField === !0,
+    negationStrategy: "wrap-final"
+  });
+}
+function lr(e, r, t) {
+  return e.functionName ? ur(e, r, t) : Ye(e, r);
+}
+function or(e, r, t) {
+  return P(e, r, t, {
+    negationStrategy: "boolean-only"
+  });
+}
+function pr(e, r, t) {
+  if (!e.children || e.children.length === 0)
+    return "";
+  const n = e.children.map((s) => t(s, r)).filter((s) => s);
+  if (n.length === 0)
+    return "";
+  const a = e.operator === "OR" ? " || " : " && ";
+  if (e.isNegated)
+    return `!(${n.join(a)})`;
+  if (n.length === 1)
+    return e.level > 0 ? `(${n[0]})` : n[0];
+  {
+    const s = n.join(a);
+    return e.level > 0 ? `(${s})` : e.operator === "OR" && n.some((u) => u.includes(" && ")) ? `(${s})` : s;
+  }
+}
+const v = (e, r) => {
+  switch (e.type) {
+    case "condition":
+      return lr(e, r, v);
+    case "function":
+      return or(e, r, v);
+    case "group":
+      return pr(e, r, v);
+    default:
+      return "";
+  }
+};
+function cr(e, r) {
+  if (e.length === 0)
+    return "";
+  const t = e.map((n) => v(n, r)).filter((n) => n);
+  return t.length === 1 ? t[0] : t.join(" && ");
+}
+function yr(e) {
+  return {
+    input: e,
+    position: 0,
+    current: e[0] || ""
+  };
+}
+function c(e) {
+  e.position += 1, e.current = e.input[e.position] || "";
+}
+function $(e, r = 1) {
+  return e.input[e.position + r] || "";
+}
+function mr(e) {
+  for (; e.current && /\s/.test(e.current); )
+    c(e);
+}
+function dr(e, r) {
+  return e.current === "(" || e.current === ")" ? (r.push({ type: "PAREN", value: e.current }), c(e), !0) : e.current === "[" || e.current === "]" ? (r.push({ type: "BRACKET", value: e.current }), c(e), !0) : e.current === "," ? (r.push({ type: "COMMA", value: e.current }), c(e), !0) : !1;
+}
+const fr = /* @__PURE__ */ new Set(["nil", "null", "true", "false"]);
+function gr(e) {
+  return fr.has(e) ? { type: "KEYWORD", value: e } : e === "lambda" ? { type: "LAMBDA", value: e } : e === "end" ? { type: "END", value: e } : { type: "IDENTIFIER", value: e };
+}
+function vr(e, r) {
+  let t = "";
+  for (c(e); e.current && e.current !== r; )
+    t += e.current, c(e);
+  return e.current === r && c(e), t;
+}
+function Tr(e) {
+  let r = "";
+  for (; e.current && /[0-9.]/.test(e.current); )
+    r += e.current, c(e);
+  return r;
+}
+function br(e) {
+  let r = "";
+  for (; e.current && /[\w.]/.test(e.current); )
+    r += e.current, c(e);
+  return r;
+}
+function Nr(e, r) {
+  if (e.current === '"' || e.current === "'") {
+    const t = vr(e, e.current);
+    return r.push({ type: "STRING", value: t }), !0;
+  }
+  if (/\d/.test(e.current)) {
+    const t = Tr(e);
+    return r.push({ type: "NUMBER", value: Number.parseFloat(t) }), !0;
+  }
+  if (/[a-z_]/i.test(e.current)) {
+    const t = br(e);
+    return r.push(gr(t)), !0;
+  }
+  return !1;
+}
+function hr(e, r, t) {
+  if (`${e.current}${$(e)}` !== t)
+    return !1;
+  if (t === "&&" || t === "||")
+    r.push({ type: "LOGICAL", value: t });
+  else if (t === "!=" || t === "==" || t === ">=" || t === "<=")
+    r.push({ type: "COMPARISON", value: t });
+  else if (t === "->")
+    r.push({ type: "ARROW", value: t });
+  else
+    return !1;
+  return c(e), c(e), !0;
+}
+function Er(e, r) {
+  const t = ["&&", "||", "!=", "==", ">=", "<=", "->"];
+  for (const a of t)
+    if (hr(e, r, a))
+      return !0;
+  const n = $(e);
+  return e.current === "!" && n !== "=" && n !== "~" ? (r.push({ type: "UNARY", value: e.current }), c(e), !0) : !1;
+}
+function qr(e, r) {
+  return e.current === ">" || e.current === "<" ? (r.push({ type: "COMPARISON", value: e.current }), c(e), !0) : e.current === "-" ? (r.push({ type: "OPERATOR", value: e.current }), c(e), !0) : !1;
+}
+function xr(e, r) {
+  Nr(e, r) || Er(e, r) || dr(e, r) || qr(e, r) || c(e);
+}
+function Ir(e) {
+  const r = [], t = yr(e);
+  for (; t.position < e.length && (mr(t), !!t.current); )
+    xr(t, r);
+  return r;
+}
+const D = { type: "EOF", value: "" };
+function Sr(e) {
+  return {
+    position: 0,
+    currentToken: e[0] || D,
+    tokens: e
+  };
+}
+function o(e) {
+  e.position += 1, e.currentToken = e.tokens[e.position] || D;
+}
+function Or(e) {
+  if (e === "nil" || e === "null" || e === "true" || e === "false")
+    return e;
+  throw new Error(`Unsupported keyword literal: ${e}`);
+}
+function Cr(e) {
+  if (e === "&&" || e === "||")
+    return e;
+  throw new Error(`Unsupported logical operator: ${e}`);
+}
+function _r() {
+  return {
+    type: "Literal",
+    value: "nil",
+    dataType: "keyword"
+  };
+}
+function Fr(e, r) {
+  let t = r();
+  for (; e.currentToken.type === "LOGICAL"; ) {
+    const n = Cr(String(e.currentToken.value));
+    o(e);
+    const a = r();
+    t = { type: "LogicalExpression", operator: n, left: t, right: a };
+  }
+  return t;
+}
+function Ar(e, r) {
+  let t = r();
+  for (; e.currentToken.type === "COMPARISON"; ) {
+    const n = String(e.currentToken.value);
+    o(e);
+    const a = r();
+    t = { type: "BinaryExpression", operator: n, left: t, right: a };
+  }
+  return t;
+}
+function j(e, r) {
+  return e.currentToken.type === "UNARY" && e.currentToken.value === "!" ? (o(e), { type: "UnaryExpression", operator: "!", argument: j(e, r), prefix: !0 }) : r();
+}
+function Rr(e, r) {
+  o(e);
+  const t = r.parseLogical();
+  return e.currentToken.type === "PAREN" && e.currentToken.value === ")" && o(e), { type: "GroupExpression", expression: t };
+}
+function Lr(e, r) {
+  const t = [];
+  for (; e.currentToken.type !== "EOF" && !(e.currentToken.type === "PAREN" && e.currentToken.value === ")"); ) {
+    if (t.length > 0)
+      if (e.currentToken.type === "COMMA")
+        o(e);
+      else
+        break;
+    const n = r.parseLogical();
+    t.push(n);
+  }
+  return e.currentToken.type === "PAREN" && e.currentToken.value === ")" && o(e), t;
+}
+function Ur(e, r, t) {
+  let n = { type: "Identifier", name: t };
+  for (; e.currentToken.type === "BRACKET" && e.currentToken.value === "["; ) {
+    o(e);
+    const a = r.parseLogical();
+    e.currentToken.type === "BRACKET" && e.currentToken.value === "]" && o(e), n = {
+      type: "MemberExpression",
+      object: n,
+      property: a,
+      computed: !0
+    };
+  }
+  return n;
+}
+function kr(e, r) {
+  const t = String(e.currentToken.value);
+  return o(e), e.currentToken.type === "PAREN" && e.currentToken.value === "(" ? (o(e), {
+    type: "CallExpression",
+    callee: { type: "Identifier", name: t },
+    arguments: Lr(e, r)
+  }) : Ur(e, r, t);
+}
+function Mr(e) {
+  if (e.currentToken.type === "STRING") {
+    const r = String(e.currentToken.value);
+    return o(e), { type: "Literal", value: r, dataType: "string" };
+  }
+  if (e.currentToken.type === "KEYWORD") {
+    const r = Or(String(e.currentToken.value));
+    return o(e), { type: "Literal", value: r, dataType: "keyword" };
+  }
+  if (e.currentToken.type === "NUMBER") {
+    const r = Number(e.currentToken.value);
+    return o(e), { type: "Literal", value: r, dataType: "number" };
+  }
+  return null;
+}
+function Pr(e, r) {
+  if (e.currentToken.type === "LAMBDA")
+    return r.parseLambda();
+  if (e.currentToken.type === "PAREN" && e.currentToken.value === "(")
+    return Rr(e, r);
+  if (e.currentToken.type === "IDENTIFIER")
+    return kr(e, r);
+  const t = Mr(e);
+  if (t)
+    return t;
+  throw new Error(`Unexpected token: ${e.currentToken.type} (${e.currentToken.value})`);
+}
+function $r(e, r) {
+  const t = [];
+  for (; e.currentToken.type !== "EOF" && e.currentToken.type !== "END"; ) {
+    const n = r.parseLogical();
+    if (t.push(n), e.currentToken.type === "COMMA")
+      o(e);
+    else
+      break;
+  }
+  if (t.length === 1)
+    return t[0];
+  if (t.length > 1) {
+    const [n, ...a] = t;
+    return a.reduce((s, i) => ({
+      type: "LogicalExpression",
+      operator: "&&",
+      left: s,
+      right: i
+    }), n);
+  }
+  return _r();
+}
+function Dr(e, r) {
+  o(e), e.currentToken.type === "PAREN" && e.currentToken.value === "(" && o(e);
+  const t = [];
+  for (; e.currentToken.type !== "EOF" && !(e.currentToken.type === "PAREN" && e.currentToken.value === ")"); ) {
+    if (t.length > 0)
+      if (e.currentToken.type === "COMMA")
+        o(e);
+      else
+        break;
+    if (e.currentToken.type === "IDENTIFIER")
+      t.push({ type: "Identifier", name: String(e.currentToken.value) }), o(e);
+    else
+      break;
+  }
+  e.currentToken.type === "PAREN" && e.currentToken.value === ")" && o(e), e.currentToken.type === "ARROW" && o(e);
+  const n = $r(e, r);
+  return e.currentToken.type === "END" && o(e), {
+    type: "LambdaExpression",
+    parameters: t,
+    body: n
+  };
+}
+function jr(e) {
+  const r = Sr(e);
+  function t() {
+    return Fr(r, n);
+  }
+  function n() {
+    return Ar(r, a);
+  }
+  function a() {
+    return j(r, s);
+  }
+  function s() {
+    return Pr(r, { parseLogical: t, parseLambda: i });
+  }
+  function i() {
+    return Dr(r, { parseLogical: t });
+  }
+  return {
+    ast: t(),
+    position: r.position
+  };
+}
+function w(e) {
+  throw new Error(`Unsupported AST node type: ${JSON.stringify(e)}`);
+}
+function S(e) {
+  if (e.type === "MemberExpression") {
+    const r = e.object.type === "Identifier" ? e.object.name : S(e.object), t = m(e.property);
+    return `${r}[${t}]`;
+  }
+  return e.type === "Identifier" ? e.name : w(e);
+}
+function m(e) {
+  switch (e.type) {
+    case "CallExpression": {
+      const r = e.callee.name, t = e.arguments.map((n) => m(n));
+      return `${r}(${t.join(", ")})`;
+    }
+    case "Identifier":
+      return e.name;
+    case "MemberExpression":
+      return S(e);
+    case "Literal":
+      return e.dataType === "string" ? `"${e.value}"` : String(e.value);
+    case "BinaryExpression": {
+      const r = m(e.left), t = m(e.right);
+      return `${r} ${e.operator} ${t}`;
+    }
+    case "LogicalExpression": {
+      const r = m(e.left), t = m(e.right);
+      return `${r} ${e.operator} ${t}`;
+    }
+    case "UnaryExpression": {
+      const r = m(e.argument);
+      return `${e.operator}${r}`;
+    }
+    case "GroupExpression":
+      return `(${m(e.expression)})`;
+    case "LambdaExpression": {
+      const r = e.parameters.map((n) => n.name).join(", "), t = m(e.body);
+      return `lambda(${r}) -> ${t} end`;
+    }
+  }
+  return w(e);
+}
+function O(e) {
+  return e !== null;
+}
+function z(e) {
+  return e.dataType === "number" ? "number" : e.dataType === "keyword" && (e.value === "true" || e.value === "false") ? "boolean" : "string";
+}
+function b(e) {
+  return e.type === "Literal" && e.dataType === "keyword" && (e.value === "nil" || e.value === "null");
+}
+function W(e, r) {
+  return e.type === "Literal" && e.value === "" && (r === "==" || r === "!=");
+}
+function N(e, r, t, n) {
+  const a = e.parameterDataTypes.get(r) || /* @__PURE__ */ new Map();
+  a.set(t, n), e.parameterDataTypes.set(r, a);
+}
+function d(e) {
+  if (e.type === "Identifier")
+    return e.name;
+  if (e.type === "MemberExpression")
+    return S(e);
+  if (e.type === "Literal")
+    return String(e.value);
+}
+function C(e) {
+  return e.type === "Literal" ? e.value : e.type === "Identifier" ? e.name : null;
+}
+function wr(e) {
+  if (e.left.type !== "CallExpression" || e.left.callee.name !== "seq.some" || e.left.arguments.length !== 2)
+    return !1;
+  const r = e.left.arguments[1];
+  if (r.type !== "LambdaExpression")
+    return !1;
+  const t = r.body;
+  if (!(t.type === "CallExpression" && t.callee.name === "include" && t.arguments.length === 2))
+    return !1;
+  const n = t.arguments[0];
+  return n.type === "CallExpression" && n.callee.name === "seq.list";
+}
+function zr(e) {
+  const { node: r, level: t, parentId: n, convert: a } = e;
+  if (!wr(r))
+    return null;
+  const s = a(r.left, t, n);
+  return b(r.right) && r.operator === "==" && (s.isNegated = !0), s;
+}
+const Wr = {
+  name: "belong-nil-comparison",
+  priority: 100,
+  handler: zr
+};
+function Br(e) {
+  const { node: r, level: t, parentId: n, convert: a } = e;
+  if (r.left.type !== "CallExpression")
+    return null;
+  if ((/* @__PURE__ */ new Set(["string.contains", "string.startsWith", "string.endsWith"])).has(r.left.callee.name))
+    return a(r.left, t, n);
+  if (r.left.callee.name === "string.match") {
+    const i = a(r.left, t, n);
+    return i.comparison = "match", b(r.right) && r.operator === "==" && (i.isNegated = !0), i;
+  }
+  return null;
+}
+const Vr = {
+  name: "string-condition-comparison",
+  priority: 90,
+  handler: Br
+};
+function B(e) {
+  const r = e.map((t, n) => ({
+    name: t.name,
+    priority: t.priority ?? 0,
+    order: n,
+    handler: t.handler
+  }));
+  return r.sort((t, n) => t.priority !== n.priority ? n.priority - t.priority : t.order - n.order), {
+    rules: Object.freeze(r)
+  };
+}
+function V(e, r) {
+  for (const t of e.rules) {
+    const n = t.handler(r);
+    if (n)
+      return n;
+  }
+  return null;
+}
+const Gr = B([
+  Wr,
+  Vr
+]);
+function Hr(e) {
+  const { node: r, level: t, parentId: n, context: a } = e, s = g(n, t);
+  if (r.left.type === "Identifier" || r.left.type === "MemberExpression") {
+    const i = d(r.left);
+    s.field = i, i && (s.fieldType = a.getFieldTypeForNode(i));
+  }
+  return r.right.type === "Literal" ? b(r.right) ? (s.comparison = `${r.operator} nil`, s.value = void 0) : W(r.right, r.operator) ? (s.comparison = `${r.operator} ''`, s.value = void 0) : (s.comparison = r.operator, s.value = r.right.value, s.valueIsLiteral = !0, N(a, s.id, "condition_value", z(r.right))) : r.right.type === "Identifier" || r.right.type === "MemberExpression" ? (s.comparison = r.operator, s.value = d(r.right), s.valueIsField = !0) : (s.comparison = r.operator, s.value = void 0), s;
+}
+function Yr(e) {
+  const { node: r, level: t, parentId: n, context: a, convert: s } = e;
+  if (r.left.type !== "CallExpression")
+    return null;
+  const i = s(r.left, t, n);
+  return i.comparison = r.operator, r.right.type === "Literal" ? b(r.right) ? (i.comparison = `${r.operator} nil`, i.value = void 0) : W(r.right, r.operator) ? (i.comparison = `${r.operator} ''`, i.value = void 0) : (i.value = r.right.value, N(
+    a,
+    i.id,
+    i.functionName || "condition_value",
+    z(r.right)
+  )) : (r.right.type === "Identifier" || r.right.type === "MemberExpression") && (i.value = d(r.right), i.valueIsField = !0), i;
+}
+function Kr(e) {
+  const r = V(Gr, e);
+  if (r)
+    return r;
+  const t = Yr(e);
+  return t || Hr(e);
+}
+function h(e, r, t) {
+  e.value = r, e.isNested = !1, e.type = t;
+}
+function Qr(e) {
+  const { arg: r, index: t, parameters: n } = e;
+  return r.type !== "Identifier" ? !1 : (h(n[t], r.name, "field"), !0);
+}
+function Jr(e) {
+  const { arg: r, index: t, parameters: n } = e;
+  return r.type !== "LambdaExpression" ? !1 : (h(n[t], m(r), "lambda"), !0);
+}
+function Xr(e) {
+  const { arg: r, index: t, parameters: n } = e;
+  return r.type !== "Literal" ? !1 : (h(n[t], r.value, "value"), !0);
+}
+function Zr(e) {
+  const { arg: r, index: t, parameters: n } = e;
+  return r.type !== "MemberExpression" ? !1 : (h(n[t], d(r), "field"), !0);
+}
+function et(e, r) {
+  return e === "any" || r === e || e === "list" && r === "list" || e === "array" && r === "list" || e === "list" && r === "array";
+}
+function rt(e) {
+  const { arg: r, index: t, functionNode: n, options: a, parameters: s } = e, i = a.convert(r, a.level + 1, n.id);
+  if (i.type === "condition" && i.functionName) {
+    const u = f.find((y) => y.name === i.functionName), l = u == null ? void 0 : u.returnType, p = s[t].valueType;
+    et(p, l) && (i.comparison = void 0, i.value = void 0), s[t].type = "condition";
+  } else
+    i.type === "condition" && (i.comparison = void 0, i.value = void 0, s[t].type = "condition");
+  return s[t].nestedNode = i, s[t].isNested = !0, s[t].value = void 0, !0;
+}
+const tt = [
+  Xr,
+  Qr,
+  Zr,
+  Jr,
+  rt
+];
+function nt(e) {
+  for (const r of tt)
+    if (r(e))
+      return;
+}
+function at(e) {
+  const { node: r, level: t, parentId: n } = e, a = g(n, t);
+  a.functionName = r.callee.name, delete a.field;
+  const s = f.find((l) => l.name === r.callee.name);
+  if (!s)
+    return a;
+  a.functionCategory = s.category;
+  const i = s.parameters.map((l) => ({
+    ...l,
+    value: void 0,
+    type: Le(s.name, l.name, l.description) ? "lambda" : l.type
+  }));
+  return i.length === 1 && (i[0].name === "items" || i[0].description.includes("多个") || i[0].description.includes("列表")) && r.arguments.length > 1 ? (i[0].value = r.arguments.map((l) => C(l)).filter(O), i[0].isNested = !1, i[0].type = "value", a.comparison = void 0, a.value = void 0) : r.arguments.forEach((l, p) => {
+    p >= i.length || nt({
+      arg: l,
+      index: p,
+      functionNode: a,
+      options: e,
+      parameters: i
+    });
+  }), a.parameters = i, s.returnType === "boolean" ? (a.comparison = void 0, a.value = void 0) : a.comparison !== void 0 && (a.comparison = "==", a.value = ""), a;
+}
+function T(e, r, t) {
+  r && (e.field = d(r), e.field && (e.fieldType = t.context.getFieldTypeForNode(e.field)));
+}
+function it(e, r) {
+  return e !== "string" ? e : r.dataType === "number" ? "number" : r.dataType === "keyword" && (r.value === "true" || r.value === "false") ? "boolean" : "string";
+}
+function st(e) {
+  const { node: r, level: t, parentId: n, context: a } = e;
+  if (r.callee.name !== "seq.some" || r.arguments.length !== 2)
+    return null;
+  const s = r.arguments[1];
+  if (s.type !== "LambdaExpression")
+    return null;
+  const i = s.body;
+  if (!(i.type === "CallExpression" && i.callee.name === "include" && i.arguments.length === 2))
+    return null;
+  const u = i.arguments[0];
+  if (!(u.type === "CallExpression" && u.callee.name === "seq.list"))
+    return null;
+  const l = g(n, t);
+  l.comparison = "belong", T(l, r.arguments[0], e);
+  let p = "string";
+  const y = u.arguments.map((E) => (E.type === "Literal" && (p = it(p, E)), C(E))).filter(O);
+  return l.value = y, N(a, l.id, "condition_value", p), l;
+}
+const ut = {
+  name: "belong-call",
+  priority: 100,
+  handler: st
+};
+function lt(e) {
+  const { node: r, level: t, parentId: n, context: a } = e;
+  if (r.callee.name !== "IPScene.isIpInNetmaskList" || r.arguments.length !== 2)
+    return null;
+  const s = r.arguments[1];
+  if (!(s.type === "CallExpression" && s.callee.name === "seq.list"))
+    return null;
+  const i = g(n, t);
+  i.comparison = "isIpInNetmaskList", T(i, r.arguments[0], e);
+  let u = "string";
+  const l = s.arguments.map((p) => (p.type === "Literal" && (p.dataType === "string" || typeof p.value == "string") && (u = "string"), C(p))).filter(O);
+  return i.value = l, N(a, i.id, "condition_value", u), i;
+}
+const ot = {
+  name: "ip-in-netmask-call",
+  priority: 110,
+  handler: lt
+};
+function pt(e) {
+  const { node: r, level: t, parentId: n } = e, s = {
+    "string.contains": "contains",
+    "string.startsWith": "startsWith",
+    "string.endsWith": "endsWith",
+    "string.match": "match"
+  }[r.callee.name];
+  if (!s)
+    return null;
+  const i = g(n, t);
+  if (i.comparison = s, r.callee.name === "string.match") {
+    T(i, r.arguments[1], e);
+    const l = r.arguments[0];
+    return l && (l.type === "Literal" ? (i.value = l.value, i.valueIsLiteral = !0) : (l.type === "Identifier" || l.type === "MemberExpression") && (i.value = d(l))), i;
+  }
+  T(i, r.arguments[0], e);
+  const u = r.arguments[1];
+  return (u == null ? void 0 : u.type) === "Literal" ? (i.value = u.value, i.valueIsLiteral = !0) : u && (u.type === "Identifier" || u.type === "MemberExpression") && (i.value = d(u)), i;
+}
+const ct = {
+  name: "string-condition-call",
+  priority: 90,
+  handler: pt
+}, yt = B([
+  ot,
+  ut,
+  ct
+]);
+function mt(e) {
+  const r = V(yt, e);
+  return r || at(e);
+}
+function x(e, r) {
+  return e.type === "LogicalExpression" && e.operator === r ? [
+    ...x(e.left, r),
+    ...x(e.right, r)
+  ] : [e];
+}
+function dt(e, r) {
+  const t = (a, s = 0, i) => {
+    switch (a.type) {
+      case "LogicalExpression": {
+        const u = _(i, s);
+        u.operator = a.operator === "&&" ? "AND" : "OR";
+        const l = x(a, a.operator);
+        return u.children = l.map((p) => t(p, s + 1, u.id)), u;
+      }
+      case "BinaryExpression":
+        return Kr({
+          node: a,
+          level: s,
+          parentId: i,
+          context: r,
+          convert: t
+        });
+      case "UnaryExpression": {
+        const u = t(a.argument, s, i);
+        return u.isNegated = !0, u;
+      }
+      case "CallExpression":
+        return mt({
+          node: a,
+          level: s,
+          parentId: i,
+          context: r,
+          convert: t
+        });
+      case "GroupExpression":
+        return t(a.expression, s, i);
+      default:
+        throw new Error(`Unsupported AST node type: ${a.type}`);
+    }
+  }, n = t(e, 0);
+  if (n.type !== "group") {
+    const a = _(void 0, 0);
+    return a.operator = "AND", a.children = [n], n.parentId = a.id, n.level = 1, [a];
+  }
+  return [n];
+}
+function ft(e, r) {
+  return G(e, r).nodes;
+}
+function G(e, r) {
+  try {
+    const t = Ir(e), n = jr(t);
+    if (n.position < t.length) {
+      const s = t.slice(n.position);
+      throw new Error(`无法解析 '${s.map((i) => i.value).join(" ")}'`);
+    }
+    return { success: !0, nodes: dt(n.ast, r) };
+  } catch (t) {
+    const n = t instanceof Error ? t.message : "未知错误";
+    return {
+      success: !1,
+      nodes: [],
+      error: `表达式解析失败，${n}`
+    };
+  }
+}
+const gt = /* @__PURE__ */ new Set(["== nil", "!= nil", "== ''", "!= ''"]);
+function H(e) {
+  return e !== void 0 && e !== "";
+}
+function vt(e) {
+  if (!e)
+    return !1;
+  const r = e.value !== void 0 && e.value !== "", t = !!(e.isNested && e.nestedNode);
+  return r || t;
+}
+function Y(e) {
+  return !gt.has(e);
+}
+function Tt(e, r) {
+  if (e.field || r.push({ nodeId: e.id, message: "条件节点缺少字段选择" }), !e.comparison) {
+    r.push({ nodeId: e.id, message: "条件节点缺少比较操作符" });
+    return;
+  }
+  Y(e.comparison) && !H(e.value) && r.push({ nodeId: e.id, message: "条件节点缺少比较值" });
+}
+function bt() {
+  return new Map(f.map((e) => [e.name, e]));
+}
+function R(e, r, t, n = {}) {
+  if (n.requireFunctionName && !e.functionName) {
+    r.push({ nodeId: e.id, message: "函数节点缺少函数选择" });
+    return;
+  }
+  if (!e.functionName)
+    return;
+  const a = t.get(e.functionName);
+  if (a && (a.parameters.forEach((s) => {
+    var i;
+    if (s.required) {
+      const u = (i = e.parameters) == null ? void 0 : i.find((l) => l.name === s.name);
+      vt(u) || r.push({
+        nodeId: e.id,
+        message: `函数 ${a.displayName} 缺少必填参数: ${s.description}`
+      });
+    }
+  }), a.returnType !== "boolean")) {
+    if (!e.comparison) {
+      r.push({ nodeId: e.id, message: `函数 ${a.displayName} 缺少比较操作符` });
+      return;
+    }
+    Y(e.comparison) && !H(e.value) && r.push({ nodeId: e.id, message: `函数 ${a.displayName} 缺少比较值` });
+  }
+}
+function Nt(e, r, t) {
+  var n;
+  if (e.expanded && (!e.children || e.children.length === 0)) {
+    r.push({ nodeId: e.id, message: "分组节点为空，请添加子条件" });
+    return;
+  }
+  (n = e.children) == null || n.forEach(t);
+}
+function ht(e) {
+  const r = [], t = bt(), n = (a) => {
+    if (a.type === "group") {
+      Nt(
+        {
+          id: a.id,
+          expanded: a.expanded,
+          children: a.children
+        },
+        r,
+        n
+      );
+      return;
+    }
+    if (a.type === "condition") {
+      a.functionName ? R(a, r, t) : Tt(a, r);
+      return;
+    }
+    a.type === "function" && R(a, r, t, { requireFunctionName: !0 });
+  };
+  return e.forEach((a) => n(a)), r;
+}
+class Et {
+  parse(r, t) {
+    return ft(r, {
+      availableFields: t.availableFields,
+      parameterDataTypes: t.parameterDataTypes,
+      getFieldTypeForNode: t.getFieldTypeForNode
+    });
+  }
+  generate(r, t) {
+    return cr(r, {
+      availableFields: t.availableFields,
+      parameterDataTypes: t.parameterDataTypes
+    });
+  }
+  validate(r) {
+    return ht(r);
+  }
+}
+function qt(e, r) {
+  return r || ((t) => {
+    const n = e().find((a) => a.value === t);
+    return (n == null ? void 0 : n.type) || "string";
+  });
+}
+function xt(e) {
+  let r = [...e || []];
+  return {
+    getAvailableFields: () => r,
+    setAvailableFields: (t) => {
+      r = [...t || []];
+    }
+  };
+}
+function It() {
+  const e = /* @__PURE__ */ new Map();
+  return {
+    parameterDataTypes: e,
+    getParameterDataTypes: () => e,
+    setParameterDataType: (r, t, n) => {
+      const a = e.get(r) || /* @__PURE__ */ new Map();
+      a.set(t, n), e.set(r, a);
+    },
+    clearParameterDataTypes: () => {
+      e.clear();
+    }
+  };
+}
+function St(e) {
+  return !e || !e.trim();
+}
+function _t(e) {
+  const r = e.engine || new Et(), t = xt(e.availableFields || []), n = It(), a = qt(t.getAvailableFields, e.getFieldTypeForNode), s = () => ({
+    availableFields: t.getAvailableFields(),
+    parameterDataTypes: n.parameterDataTypes,
+    getFieldTypeForNode: a
+  }), i = (y) => St(y) ? { success: !0, nodes: [] } : G(y, s());
+  return {
+    parseDetailed: i,
+    parse: (y) => i(y).nodes,
+    generate: (y) => r.generate(y, s()),
+    validate: (y) => r.validate(y),
+    getAvailableFields: t.getAvailableFields,
+    setAvailableFields: t.setAvailableFields,
+    getParameterDataTypes: n.getParameterDataTypes,
+    setParameterDataType: n.setParameterDataType,
+    clearParameterDataTypes: n.clearParameterDataTypes
+  };
+}
+export {
+  f as AVIATOR_FUNCTIONS,
+  Ot as COMPARISON_OPERATORS,
+  _t as createAviatorExpressionService,
+  g as createConditionNode,
+  _ as createGroupNode,
+  q as extractFieldPaths,
+  Ct as extractFieldsFromJson,
+  cr as generateExpression,
+  k as generateNodeId,
+  G as parseExpression,
+  ft as parseExpressionNodes,
+  Le as shouldBeLambdaParameter,
+  ht as validateExpression
+};
+//# sourceMappingURL=headless.js.map
